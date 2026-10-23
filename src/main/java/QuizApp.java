@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+
 public class QuizApp {
     public static void main(String[] args)throws IOException {
         System.out.println("Java Quiz Server");
@@ -20,8 +21,32 @@ public class QuizApp {
            BufferedReader reader = new BufferedReader(
                    new InputStreamReader(client.getInputStream())
            );
+
             String requestLine = reader.readLine();
-           System.out.println("Request : " + requestLine);
+           String header ;
+           int contentLength =0;
+
+           while((header=reader.readLine())!=null&&!header.isEmpty()){
+               if(header.toLowerCase().startsWith("content-length:")){
+                   contentLength = Integer.parseInt(header.substring(header.indexOf(':')+1).trim());
+               }
+           }
+
+           if (requestLine.startsWith("POST /submit")) {
+               System.out.println("Quiz submitted!");
+           }
+           char[] body = new char[contentLength];
+           reader.read(body, 0, contentLength);
+           String answers = new String(body);
+           int score = 0;
+
+           if (answers.contains("q1=extends")) score++;
+           if (answers.contains("q2=main")) score++;
+           if (answers.contains("q3=new")) score++;
+           if (answers.contains("q4=int")) score++;
+           if (answers.contains("q5=%3D%3D") || answers.contains("q5=%3d%3d") || answers.contains("q5===%3D")) score++;
+
+           System.out.println("Score: " + score + "/5");
 
            String html = Files.readString(
                    Path.of("src/main/resources/static/quiz.html")
