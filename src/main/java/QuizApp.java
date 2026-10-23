@@ -32,9 +32,7 @@ public class QuizApp {
                }
            }
 
-           if (requestLine.startsWith("POST /submit")) {
-               System.out.println("Quiz submitted!");
-           }
+
            char[] body = new char[contentLength];
            reader.read(body, 0, contentLength);
            String answers = new String(body);
@@ -46,13 +44,17 @@ public class QuizApp {
            if (answers.contains("q4=int")) score++;
            if (answers.contains("q5=%3D%3D") || answers.contains("q5=%3d%3d") || answers.contains("q5===%3D")) score++;
 
-           System.out.println("Score: " + score + "/5");
+
+
 
            String html = Files.readString(
                    Path.of("src/main/resources/static/quiz.html")
            );
-
+           if (requestLine.startsWith("POST /submit")) {
+               html = "<h1>Your Score: " + score + "/5</h1>";
+           }
            OutputStream out = client.getOutputStream();
+
            String response =
                           "HTTP/1.1 200 OK\r\n"+
                           "Content-type: text/html\r\n"+
