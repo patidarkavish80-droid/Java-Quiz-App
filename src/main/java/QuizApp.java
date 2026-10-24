@@ -33,9 +33,13 @@ public class QuizApp {
            }
 
 
-           char[] body = new char[contentLength];
-           reader.read(body, 0, contentLength);
-           String answers = new String(body);
+           String answers = "";
+
+           if (requestLine.startsWith("POST /submit")) {
+               char[] body = new char[contentLength];
+               reader.read(body, 0, contentLength);
+               answers = new String(body);
+           }
            int score = 0;
            String feedback = "";
 
@@ -89,16 +93,17 @@ public class QuizApp {
            if (requestLine.startsWith("POST /submit")) {
                html = "<h1>Your Score: " + score + "/5</h1>" +feedback+"<br><a href='/'>Try Again</a>";
            }
-           OutputStream out = client.getOutputStream();
+
 
            String response =
                           "HTTP/1.1 200 OK\r\n"+
                           "Content-type: text/html\r\n"+
                                    "\r\n"+
                            html;
-
+           OutputStream out = client.getOutputStream();
                    out.write(response.getBytes(StandardCharsets.UTF_8));
                     out.flush();
+                    client.close();
            System.out.println("Java Quiz Server is running");
        }
     }
