@@ -51,7 +51,7 @@ public class QuizApp {
                    Path.of("src/main/resources/static/quiz.html")
            );
            if (requestLine.startsWith("POST /submit")) {
-               html = "<h1>Your Score: " + score + "/5</h1>";
+               html = "<h1>Your Score: " + score + "/5</h1><a href='/'>Try Again</a>";
            }
            OutputStream out = client.getOutputStream();
 
