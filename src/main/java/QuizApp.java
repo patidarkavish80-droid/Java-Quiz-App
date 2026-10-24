@@ -37,12 +37,48 @@ public class QuizApp {
            reader.read(body, 0, contentLength);
            String answers = new String(body);
            int score = 0;
+           String feedback = "";
 
-           if (answers.contains("q1=extends")) score++;
-           if (answers.contains("q2=main")) score++;
-           if (answers.contains("q3=new")) score++;
-           if (answers.contains("q4=int")) score++;
-           if (answers.contains("q5=%3D%3D") || answers.contains("q5=%3d%3d") || answers.contains("q5===%3D")) score++;
+           if (answers.contains("q1=extends")){
+               score++;
+               feedback += "Q1:Correct<br>";
+           }else if(answers.contains("q1=")){
+               feedback+="Q1.Wrong<br>";
+           }else{
+               feedback += "Q1: Not answered<br>";
+           }
+           if (answers.contains("q2=main")) {
+               score++;
+               feedback += "Q2:Correct<br>";
+           }else if(answers.contains("q2=")){
+               feedback+="Q2.Wrong<br>";
+           }else{
+               feedback += "Q2: Not answered<br>";
+           }
+           if (answers.contains("q3=new")){
+               score++;
+               feedback += "Q3:Correct<br>";
+           }else if(answers.contains("q3=")){
+               feedback+="Q3.Wrong<br>";
+           }else{
+               feedback += "Q3: Not answered<br>";
+           }
+           if (answers.contains("q4=int")) {
+               score++;
+               feedback += "Q4:Correct<br>";
+           }else if(answers.contains("q4=")){
+               feedback+="Q4.Wrong<br>";
+           }else{
+               feedback += "Q4: Not answered<br>";
+           }
+           if (answers.contains("q5=%3D%3D") || answers.contains("q5=%3d%3d") || answers.contains("q5===%3D")){
+               score++;
+               feedback += "Q5:Correct<br>";
+           }else if(answers.contains("q5=")){
+               feedback+="Q5.Wrong<br>";
+           }else{
+               feedback += "Q5: Not answered<br>";
+           }
 
 
 
@@ -51,7 +87,7 @@ public class QuizApp {
                    Path.of("src/main/resources/static/quiz.html")
            );
            if (requestLine.startsWith("POST /submit")) {
-               html = "<h1>Your Score: " + score + "/5</h1><a href='/'>Try Again</a>";
+               html = "<h1>Your Score: " + score + "/5</h1>" +feedback+"<br><a href='/'>Try Again</a>";
            }
            OutputStream out = client.getOutputStream();
 
